@@ -2,6 +2,7 @@ package misis.cart
 
 import misis.cart.model._
 import misis.cart.repository.ItemRepositoryInMemory
+import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
 object CartApp extends App {
   val repository = new ItemRepositoryInMemory
@@ -12,5 +13,7 @@ object CartApp extends App {
   repository.updateItem(UpdateItem(pen.id, 230))
   repository.deleteItem(cupId)
 
-  println(repository.list())
+  private val list = repository.list()
+  val result = list.asJson.spaces2
+  println(result)
 }
