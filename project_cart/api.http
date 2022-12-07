@@ -1,0 +1,45 @@
+GET http://localhost:8080/carts
+
+###
+POST http://localhost:8080/add
+Content-Type: application/json
+
+{"firstname": "Vlad","surname": "Peh"}
+###
+POST http://localhost:8080/add
+Content-Type: application/json
+
+{"firstname": "Roman","surname": "Yuav"}
+###
+POST http://localhost:8080/add
+Content-Type: application/json
+
+{"firstname": "Alex","surname": "Best"}
+###
+GET http://localhost:8080/cart/9e8805f0-d2a4-45a3-bf60-6f24fb54e62a
+
+###
+PUT http://localhost:8080/transfer
+Content-Type: application/json
+
+{"id_1": "a9acd28b-85a3-4003-ae30-ce0b0fd7ae0d","id_2": "58be2403-3c6d-4ae8-aabe-277c52bb02ef", "amount":  50}
+
+###
+DELETE http://localhost:8080/cart/c79ef496-53b0-42fe-b55c-150096862410
+
+###
+PUT http://localhost:8080/cart/4174242a-a31b-46f8-82b2-7f1b79b812b2
+Content-Type: application/json
+
+{"id_1":"4174242a-a31b-46f8-82b2-7f1b79b812b2","id_2": "dc179fc1-d1d2-40e1-9d61-6c2e4d8eb7d9", "amount": 50}
+
+###
+PUT http://localhost:8080/cart/4174242a-a31b-46f8-82b2-7f1b79b812b2/deposit
+Content-Type: application/json
+
+100
+###
+PUT http://localhost:8080/cart/0bf75de7-2470-4310-ae28-8cb4de2a21c8/takes
+Content-Type: application/json
+
+10

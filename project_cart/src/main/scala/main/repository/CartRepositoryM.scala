@@ -10,7 +10,9 @@ class CartRepositoryM extends CartRepository {
     bank.values.toList
   }
 
-  override def get(id: UUID): Account = ???
+  override def get(id: UUID): Account = {
+    bank(id)
+  }
 
   override def create(create: CreateAcc): Account = {
     val cart = Account(id = UUID.randomUUID(), firstname = create.firstname, surname = create.surname)
