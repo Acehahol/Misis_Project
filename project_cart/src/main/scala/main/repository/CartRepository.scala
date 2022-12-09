@@ -6,17 +6,17 @@ import java.util.UUID
 import scala.concurrent.Future
 
 trait CartRepository {
-  def list(): List[Account]
+  def list(): Future[List[Account]]
 
-  def get(id: UUID): Account
+  def get(id: UUID): Future[Account]
 
-  def create(cart: CreateAcc): Account
+  def create(cart: CreateAcc):Future[Account]
 
-  def transfer(carts: Transfercash):  Option[Account]
+  def transfer(carts: Transfercash): Future[Future[Option[Account]]]
 
-  def deposit(carts: Transaction): Option[Account]
+  def deposit(carts: Transaction): Future[Option[Account]]
 
-  def takes(carts: Transaction): Option[Account]
+  def takes(carts: Transaction): Future[Option[Account]]
 
-  def delete(id: UUID): Unit
+  def delete(id: UUID): Future[Unit]
 }

@@ -10,8 +10,11 @@ import main.model.{CreateAcc, Transaction, Transfercash}
 import main.repository.CartRepositoryM
 import main.route.ItemRoute
 
+import scala.concurrent.ExecutionContextExecutor
+
 object CartHttp extends App {
   implicit val system: ActorSystem = ActorSystem("CartApp")
+  implicit val ec: ExecutionContextExecutor = system.dispatcher
   val bank = new CartRepositoryM
   val itemroute = new ItemRoute(bank).route
 
