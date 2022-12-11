@@ -1,13 +1,13 @@
 package main.repository
-import main.model.{Account, CreateAcc, Transaction, Transfercash}
 
+import main.model.{Account, CreateAcc, Transaction, Transfercash}
 import java.util.UUID
 import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 
 class CartRepositoryM(implicit val ec :ExecutionContext) extends CartRepository {
   private val bank = mutable.Map[UUID, Account]()
-  override def list(): Future[List[Account]] = Future {
+  override def list(): Future[Seq[Account]] = Future {
     bank.values.toList
   }
 
@@ -21,7 +21,7 @@ class CartRepositoryM(implicit val ec :ExecutionContext) extends CartRepository 
     cart
   }
 
-  override def transfer(carts: Transfercash): Future[Future[Option[Account]]] = Future {
+  override def transfer(carts: Transfercash): Future[Option[Account]] =  {
     takes(Transaction(carts.id_1, carts.amount))
     deposit(Transaction(carts.id_2, carts.amount))
   }

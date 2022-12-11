@@ -22,18 +22,18 @@ GET http://localhost:8080/cart/9e8805f0-d2a4-45a3-bf60-6f24fb54e62a
 PUT http://localhost:8080/transfer
 Content-Type: application/json
 
-{"id_1": "830741fd-5bab-40a5-92ed-cbaf22e8e64d","id_2": "8b65b0e7-8622-4d8d-bb68-53e50b95d96d", "amount":  50}
+{"id_1": "07fd814c-de92-443a-830d-b587f88b0cad","id_2": "1585b7d9-4e7b-4933-95af-4dd76f5e243b", "amount":  50}
 
 ###
 DELETE http://localhost:8080/cart/c79ef496-53b0-42fe-b55c-150096862410
 
 ###
-PUT http://localhost:8080/cart/830741fd-5bab-40a5-92ed-cbaf22e8e64d/deposit
+PUT http://localhost:8080/cart/07fd814c-de92-443a-830d-b587f88b0cad/deposit
 Content-Type: application/json
 
 100
 ###
-PUT http://localhost:8080/cart/830741fd-5bab-40a5-92ed-cbaf22e8e64d/takes
+PUT http://localhost:8080/cart/07fd814c-de92-443a-830d-b587f88b0cad/takes
 Content-Type: application/json
 
 10

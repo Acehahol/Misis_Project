@@ -12,7 +12,7 @@ import main.route.ItemRoute
 
 import scala.concurrent.ExecutionContextExecutor
 
-object CartHttp extends App {
+object CartMemoryApp extends App {
   implicit val system: ActorSystem = ActorSystem("CartApp")
   implicit val ec: ExecutionContextExecutor = system.dispatcher
   val bank = new CartRepositoryM

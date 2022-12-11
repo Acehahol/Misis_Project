@@ -2,7 +2,7 @@ package main.model
 
 import java.util.UUID
 
-case class Account(id: UUID, firstname: String, surname: String, cash : Int = 0)
+case class Account(id: UUID = UUID.randomUUID(), firstname: String, surname: String, cash : Int = 0)
 
 case class CreateAcc(firstname: String, surname: String)
 
