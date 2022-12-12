@@ -22,7 +22,7 @@ GET http://localhost:8080/cart/4494520c-3203-4fee-a7a1-045a87922bac
 PUT http://localhost:8080/transfer
 Content-Type: application/json
 
-{"id_1": "07fd814c-de92-443a-830d-b587f88b0cad","id_2": "4494520c-3203-4fee-a7a1-045a87922bac", "amount":  10}
+{"id_1": "07fd814c-de92-443a-830d-b587f88b0cad","id_2": "4494520c-3203-4fee-a7a1-045a87922bac", "amount":  150}
 
 ###
 DELETE http://localhost:8080/cart/e887ae00-e6d6-4bab-9ff9-eb381bb76d96
