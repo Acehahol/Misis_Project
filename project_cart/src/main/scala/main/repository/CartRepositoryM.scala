@@ -21,25 +21,25 @@ class CartRepositoryM(implicit val ec :ExecutionContext) extends CartRepository 
     cart
   }
 
-  override def transfer(carts: Transfercash): Future[Option[Account]] =  {
+  override def transfer(carts: Transfercash): Future[Either[String, Account]] =  {
     takes(Transaction(carts.id_1, carts.amount))
     deposit(Transaction(carts.id_2, carts.amount))
   }
 
-  override def deposit(carts: Transaction): Future[Option[Account]] = Future {
+  override def deposit(carts: Transaction): Future[Either[String, Account]] = Future {
     bank.get(carts.id).map { cart =>
       val up_cart = cart.copy(cash = cart.cash + carts.amount)
       bank.put(cart.id, up_cart)
-      up_cart
-    }
+      Right(up_cart)
+    }.getOrElse(Left("Не найден элемент"))
   }
 
-  override def takes(carts: Transaction): Future[Option[Account]] = Future {
+  override def takes(carts: Transaction): Future[Either[String,Account]] = Future {
     bank.get(carts.id).map { cart =>
       val up_cart = cart.copy(cash = cart.cash - carts.amount)
       bank.put(cart.id, up_cart)
-      up_cart
-    }
+      Right(up_cart)
+    }.getOrElse(Left("Не найден элемент"))
   }
 
   override def delete(id: UUID): Future[Unit] = Future {

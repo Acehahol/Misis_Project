@@ -1,5 +1,6 @@
 package main.route
 
+import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import main.model.{CreateAcc, Transaction, Transfercash}
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
@@ -7,7 +8,9 @@ import io.circe._
 import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
-import main.repository.CartRepository
+import main.repository.{BiggerException, CartRepository}
+
+import scala.util.{Failure, Success}
 
 class ItemRoute(bank: CartRepository) extends FailFastCirceSupport {
   def route = {
@@ -35,7 +38,10 @@ class ItemRoute(bank: CartRepository) extends FailFastCirceSupport {
       //} ~
       path("transfer") {
         (put & entity(as[Transfercash])) { del =>
-          complete(bank.transfer(del))
+          onSuccess(bank.transfer(del)) {
+            case Right(value) => complete(value)
+            case Left(s) => complete(StatusCodes.NotAcceptable, s)
+          }
         }
       } ~
       //Удалить счет
@@ -47,13 +53,19 @@ class ItemRoute(bank: CartRepository) extends FailFastCirceSupport {
       //Положить средства
       path("cart" / JavaUUID / "deposit") { id =>
         (put & entity(as[Int])) { amount =>
-          complete(bank.deposit(Transaction(id, amount)))
+          onSuccess(bank.deposit(Transaction(id, amount))) {
+            case Right(value) => complete(value)
+            case Left(s) => complete(StatusCodes.NotAcceptable, s)
+          }
         }
       } ~
       //Снятие
       path("cart" / JavaUUID / "takes") { id =>
         (put & entity(as[Int])) { amount =>
-          complete(bank.takes(Transaction(id, amount)))
+          onSuccess(bank.takes(Transaction(id, amount))) {
+            case Right(value) => complete(value)
+            case Left(s) => complete(StatusCodes.NotAcceptable, s )
+          }
         }
       }
   }

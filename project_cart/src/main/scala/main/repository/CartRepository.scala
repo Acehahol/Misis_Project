@@ -12,11 +12,11 @@ trait CartRepository {
 
   def create(cart: CreateAcc):Future[Account]
 
-  def transfer(carts: Transfercash): Future[Option[Account]]
+  def transfer(carts: Transfercash): Future[Either[String, Account]]
 
-  def deposit(carts: Transaction): Future[Option[Account]]
+  def deposit(carts: Transaction): Future[Either[String, Account]]
 
-  def takes(carts: Transaction): Future[Option[Account]]
+  def takes(carts: Transaction): Future[Either[String, Account]]
 
   def delete(id: UUID): Future[Unit]
 }

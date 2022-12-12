@@ -29,39 +29,57 @@ class CartRepositoryDb(implicit val ec :ExecutionContext, db : Database) extends
     } yield res
   }
 
-  override def transfer(carts: Transfercash): Future[Option[Account]] = {
+  override def transfer(carts: Transfercash): Future[Either[String,Account]] = {
     takes(Transaction(carts.id_1, carts.amount))
     deposit(Transaction(carts.id_2, carts.amount))
   }
 
-  override def deposit(carts: Transaction): Future[Option[Account]] = {
+  override def deposit(carts: Transaction): Future[Either[String,Account]] = {
 
-    for {
-      existed <- find(carts.id)
-      _ <- db.run {
-        itemTable
-          .filter(_.id === carts.id)
-          .map(_.cash)
-          .update(existed.get.cash + carts.amount)
-      }
-      res <- find(carts.id)
-    } yield res
-  }
+  val query = itemTable
+    .filter(_.id === carts.id)
+    .map(_.cash)
+  for {
+    oldcash <- db.run(query.result.headOption)
+    cash = carts.amount
+    updateCash = oldcash.map { oldc =>
+       Right(oldc + cash)
+    }.getOrElse(Left("Не найдено значение"))
+    future = updateCash.map(price => db.run {
+      query.update(price)
+    }) match {
+      case Right(future) => future.map(Right(_))
+      case Left(s) => Future.successful(Left(s))
+    }
+    updated <- future
+    res <- find(carts.id)
+  } yield updated.map(_ => res.get)
+}
 
-  override def takes(carts: Transaction): Future[Option[Account]] = {
+  override def takes(carts: Transaction): Future[Either[String,Account]] = {
+    val query = itemTable
+        .filter(_.id === carts.id)
+        .map(_.cash)
     for {
-      existed <- find(carts.id)
-      _ <- db.run {
-        itemTable
-          .filter(_.id === carts.id)
-          .map(_.cash)
-          .update(existed.get.cash - carts.amount)
+      oldcash <- db.run(query.result.headOption)
+      cash = carts.amount
+      updateCash = oldcash.map { oldc =>
+        if (oldc - cash < 0)
+          Left("Недостаточно стредств")
+        else Right (oldc - cash)
+      }.getOrElse(Left("Не найдено значение"))
+      future = updateCash.map(price => db.run {  query.update(price)})match {
+        case Right(future) => future.map(Right(_))
+        case Left(s) => Future.successful(Left(s))
       }
+      updated <- future
       res <- find(carts.id)
-    } yield res
+      }yield updated.map(_ => res.get)
   }
 
   override def delete(id: UUID): Future[Unit] = {
     db.run(itemTable.filter(_.id ===id).delete).map(_ => ())
   }
 }
+
+class  BiggerException extends  Error
