@@ -50,7 +50,7 @@ class CartRepositoryDb(implicit val ec :ExecutionContext, db : Database) extends
     cash = carts.amount
     updateCash = oldcash.map { oldc =>
        Right(oldc + cash)
-    }.getOrElse(Left("Не найдено значение"))
+    }.getOrElse(Left("Не найден аккаунт"))
     future = updateCash.map(price => db.run {
       query.update(price)
     }) match {
@@ -71,9 +71,9 @@ class CartRepositoryDb(implicit val ec :ExecutionContext, db : Database) extends
       cash = carts.amount
       updateCash = oldcash.map { oldc =>
         if (oldc - cash < 0)
-          Left("Недостаточно стредств")
+          Left("Недостаточно средств")
         else Right (oldc - cash)
-      }.getOrElse(Left("Не найдено значение"))
+      }.getOrElse(Left("Не найден аккаунт"))
       future = updateCash.map(price => db.run {  query.update(price)})match {
         case Right(future) => future.map(Right(_))
         case Left(s) => Future.successful(Left(s))

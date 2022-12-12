@@ -22,8 +22,14 @@ class CartRepositoryM(implicit val ec :ExecutionContext) extends CartRepository 
   }
 
   override def transfer(carts: Transfercash): Future[Either[String, Account]] =  {
-    takes(Transaction(carts.id_1, carts.amount))
-    deposit(Transaction(carts.id_2, carts.amount))
+    for {
+      future <- takes(Transaction(carts.id_1, carts.amount))
+      nextstep = future match {
+        case Right(account) => deposit(Transaction(carts.id_2, carts.amount))
+        case Left(s) => Future.successful(Left(s))
+      }
+      res <- nextstep
+    } yield res
   }
 
   override def deposit(carts: Transaction): Future[Either[String, Account]] = Future {
