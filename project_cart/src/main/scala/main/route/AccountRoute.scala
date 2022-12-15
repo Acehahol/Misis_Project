@@ -8,14 +8,14 @@ import io.circe._
 import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
-import main.repository.{BiggerException, CartRepository}
+import main.repository.{BiggerException, AccountRepository}
 
 import scala.util.{Failure, Success}
 
-class ItemRoute(bank: CartRepository) extends FailFastCirceSupport {
+class AccountRoute(bank: AccountRepository) extends FailFastCirceSupport {
   def route = {
     //Посмотреть все счета
-    (path("carts") & get) {
+    (path("accounts") & get) {
       val list = bank.list()
       complete(list)
     } ~
@@ -26,7 +26,7 @@ class ItemRoute(bank: CartRepository) extends FailFastCirceSupport {
         }
       } ~
       //Получить данные
-      path("cart" / JavaUUID) { id =>
+      path("account" / JavaUUID) { id =>
         get {
           complete(bank.get(id))
         }
@@ -45,13 +45,13 @@ class ItemRoute(bank: CartRepository) extends FailFastCirceSupport {
         }
       } ~
       //Удалить счет
-      path("cart" / JavaUUID) { id =>
+      path("account" / JavaUUID) { id =>
         delete {
           complete(bank.delete(id))
         }
       } ~
       //Положить средства
-      path("cart" / JavaUUID / "deposit") { id =>
+      path("account" / JavaUUID / "deposit") { id =>
         (put & entity(as[Int])) { amount =>
           onSuccess(bank.deposit(Transaction(id, amount))) {
             case Right(value) => complete(value)
@@ -60,7 +60,7 @@ class ItemRoute(bank: CartRepository) extends FailFastCirceSupport {
         }
       } ~
       //Снятие
-      path("cart" / JavaUUID / "takes") { id =>
+      path("account" / JavaUUID / "takes") { id =>
         (put & entity(as[Int])) { amount =>
           onSuccess(bank.takes(Transaction(id, amount))) {
             case Right(value) => complete(value)

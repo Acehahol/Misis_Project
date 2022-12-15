@@ -1,6 +1,6 @@
 package main.db
 
-import main.db.CartDb.itemTable
+import main.db.AccountDb.itemTable
 
 import scala.concurrent.{ExecutionContext, Future}
 import slick.jdbc.PostgresProfile.api._

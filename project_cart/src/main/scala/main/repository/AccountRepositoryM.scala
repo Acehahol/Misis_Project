@@ -5,7 +5,7 @@ import java.util.UUID
 import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 
-class CartRepositoryM(implicit val ec :ExecutionContext) extends CartRepository {
+class AccountRepositoryM(implicit val ec :ExecutionContext) extends AccountRepository {
   private val bank = mutable.Map[UUID, Account]()
   override def list(): Future[Seq[Account]] = Future {
     bank.values.toList

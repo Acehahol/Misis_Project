@@ -7,16 +7,16 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import main.model.{CreateAcc, Transaction, Transfercash}
-import main.repository.CartRepositoryM
-import main.route.ItemRoute
+import main.repository.AccountRepositoryM
+import main.route.AccountRoute
 
 import scala.concurrent.ExecutionContextExecutor
 
-object CartMemoryApp extends App {
+object AccountMemoryApp extends App {
   implicit val system: ActorSystem = ActorSystem("CartApp")
   implicit val ec: ExecutionContextExecutor = system.dispatcher
-  val bank = new CartRepositoryM
-  val itemroute = new ItemRoute(bank).route
+  val bank = new AccountRepositoryM
+  val itemroute = new AccountRoute(bank).route
 
   Http().newServerAt("0.0.0.0", 8080).bind(itemroute)
 

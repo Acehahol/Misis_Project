@@ -5,7 +5,7 @@ import main.model.{Account, CreateAcc, Transaction, Transfercash}
 import java.util.UUID
 import scala.concurrent.Future
 
-trait CartRepository {
+trait AccountRepository {
   def list(): Future[Seq[Account]]
 
   def get(id: UUID): Future[Account]

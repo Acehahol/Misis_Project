@@ -1,4 +1,4 @@
-GET http://localhost:8080/carts
+GET http://localhost:8080/accounts
 
 ###
 POST http://localhost:8080/add
@@ -16,7 +16,7 @@ Content-Type: application/json
 
 {"firstname": "Alex","surname": "Best"}
 ###
-GET http://localhost:8080/cart/4494520c-3203-4fee-a7a1-045a87922bac
+GET http://localhost:8080/account/4494520c-3203-4fee-a7a1-045a87922bac
 
 ###
 PUT http://localhost:8080/transfer
@@ -25,15 +25,15 @@ Content-Type: application/json
 {"id_1": "07fd814c-de92-443a-830d-b587f88b0cad","id_2": "4494520c-3203-4fee-a7a1-045a87922bac", "amount":  1000}
 
 ###
-DELETE http://localhost:8080/cart/e887ae00-e6d6-4bab-9ff9-eb381bb76d96
+DELETE http://localhost:8080/account/e887ae00-e6d6-4bab-9ff9-eb381bb76d96
 
 ###
-PUT http://localhost:8080/cart/4494520c-3203-4fee-a7a1-045a87922bac/deposit
+PUT http://localhost:8080/account/4494520c-3203-4fee-a7a1-045a87922bac/deposit
 Content-Type: application/json
 
 300
 ###
-PUT http://localhost:8080/cart/4494520c-3203-4fee-a7a1-045a87922bac/takes
+PUT http://localhost:8080/account/4494520c-3203-4fee-a7a1-045a87922bac/takes
 Content-Type: application/json
 
 150
