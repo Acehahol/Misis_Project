@@ -10,7 +10,7 @@ trait AccountRepository {
 
   def get(id: UUID): Future[Account]
 
-  def create(cart: CreateAcc):Future[Account]
+  def create(cart: CreateAcc): Future[Account]
 
   def transfer(carts: Transfercash): Future[Either[String, Account]]
 

@@ -64,7 +64,7 @@ class AccountRoute(bank: AccountRepository) extends FailFastCirceSupport {
         (put & entity(as[Int])) { amount =>
           onSuccess(bank.takes(Transaction(id, amount))) {
             case Right(value) => complete(value)
-            case Left(s) => complete(StatusCodes.NotAcceptable, s )
+            case Left(s) => complete(StatusCodes.NotAcceptable, s)
           }
         }
       }

@@ -14,8 +14,7 @@ import io.circe.parser._
 import io.circe.syntax._
 
 
-
-object CartHttpApp extends  App with FailFastCirceSupport{
+object CartHttpApp extends App with FailFastCirceSupport {
   implicit val system: ActorSystem = ActorSystem("CartApp")
   val repository = new ItemRepositoryInMemory
 
@@ -27,7 +26,7 @@ object CartHttpApp extends  App with FailFastCirceSupport{
   val route: Route =
     (path("hello") & get) {
       complete("Hello scala world!")
-      } ~
+    } ~
       (path("items") & get) {
         val list = repository.list()
         complete(list)

@@ -7,7 +7,7 @@ import slick.lifted.Tag
 import java.util.UUID
 
 object AccountDb {
-  class ItemTable(tag: Tag) extends Table[Account](tag, "Accounts"){
+  class ItemTable(tag: Tag) extends Table[Account](tag, "Accounts") {
     val id = column[UUID]("id", O.PrimaryKey)
     val firstname = column[String]("firstname")
     val surname = column[String]("surname")

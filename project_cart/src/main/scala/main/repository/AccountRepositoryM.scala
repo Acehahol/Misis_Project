@@ -5,8 +5,9 @@ import java.util.UUID
 import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 
-class AccountRepositoryM(implicit val ec :ExecutionContext) extends AccountRepository {
+class AccountRepositoryM(implicit val ec: ExecutionContext) extends AccountRepository {
   private val bank = mutable.Map[UUID, Account]()
+
   override def list(): Future[Seq[Account]] = Future {
     bank.values.toList
   }
@@ -21,7 +22,7 @@ class AccountRepositoryM(implicit val ec :ExecutionContext) extends AccountRepos
     cart
   }
 
-  override def transfer(carts: Transfercash): Future[Either[String, Account]] =  {
+  override def transfer(carts: Transfercash): Future[Either[String, Account]] = {
     for {
       future <- takes(Transaction(carts.id_1, carts.amount))
       nextstep = future match {
@@ -40,7 +41,7 @@ class AccountRepositoryM(implicit val ec :ExecutionContext) extends AccountRepos
     }.getOrElse(Left("Не найден элемент"))
   }
 
-  override def takes(carts: Transaction): Future[Either[String,Account]] = Future {
+  override def takes(carts: Transaction): Future[Either[String, Account]] = Future {
     bank.get(carts.id).map { cart =>
       val up_cart = cart.copy(cash = cart.cash - carts.amount)
       bank.put(cart.id, up_cart)
