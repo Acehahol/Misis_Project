@@ -4,7 +4,7 @@ GET http://localhost:8080/accounts
 POST http://localhost:8080/add
 Content-Type: application/json
 
-{"firstname": "Vlad","surname": "Peh"}
+{"firstname": "Vlad","surname": "Peh2"}
 ###
 POST http://localhost:8080/add
 Content-Type: application/json

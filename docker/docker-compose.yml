@@ -1,10 +1,17 @@
 version: '4.14.1'
 
 services:
-  db:
+  db_1:
     image: postgres:9.6
-    container_name: postgres-misis
+    container_name: postgres-misis_1
     environment:
       POSTGRES_PASSWORD: 1111
     ports:
       - 5434:5432
+  db_2:
+    image: postgres:9.6
+    container_name: postgres-misis_2
+    environment:
+      POSTGRES_PASSWORD: 1111
+    ports:
+      - 5433:5432
