@@ -3,11 +3,11 @@ package main.repository
 import main.db.AccountDb._
 import main.model.{Account, CreateAcc, Transaction, Transfercash}
 import slick.jdbc.PostgresProfile.api._
-
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
-class AccountRepositoryDb(implicit val ec: ExecutionContext, db: Database) extends AccountRepository {
+class AccountRepositoryDb(client: TranferClient)(implicit val ec: ExecutionContext, db: Database)
+    extends AccountRepository {
 
     override def list(): Future[Seq[Account]] = {
         db.run(itemTable.result)
@@ -34,6 +34,17 @@ class AccountRepositoryDb(implicit val ec: ExecutionContext, db: Database) exten
             future <- takes(Transaction(carts.id_1, carts.amount))
             nextstep = future match {
                 case Right(account) => deposit(Transaction(carts.id_2, carts.amount))
+                case Left(s) => Future.successful(Left(s))
+            }
+            res <- nextstep
+        } yield res
+    }
+
+    override def transfer_other(carts: Transfercash): Future[Either[String, Account]] = {
+        for {
+            future <- takes(Transaction(carts.id_1, carts.amount))
+            nextstep = future match {
+                case Right(account) => client.deposit_other(Transaction(carts.id_2, carts.amount))
                 case Left(s) => Future.successful(Left(s))
             }
             res <- nextstep

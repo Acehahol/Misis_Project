@@ -1,7 +1,7 @@
 GET http://localhost:8080/accounts
 
 ###
-POST http://localhost:8080/add
+POST http://localhost:8081/add
 Content-Type: application/json
 
 {"firstname": "Vlad","surname": "Peh2"}
@@ -28,12 +28,17 @@ Content-Type: application/json
 DELETE http://localhost:8080/account/e887ae00-e6d6-4bab-9ff9-eb381bb76d96
 
 ###
-PUT http://localhost:8080/account/4494520c-3203-4fee-a7a1-045a87922bac/deposit
+PUT http://localhost:8080/account/6180b626-7829-4d70-b869-b475ecd27996/deposit
 Content-Type: application/json
 
 300
 ###
-PUT http://localhost:8080/account/4494520c-3203-4fee-a7a1-045a87922bac/takes
+PUT http://localhost:8080/account/6180b626-7829-4d70-b869-b475ecd27996/takes
 Content-Type: application/json
 
 150
+###
+PUT http://localhost:8080/transfer_other
+Content-Type: application/json
+
+{"id_1": "6180b626-7829-4d70-b869-b475ecd27996","id_2": "45380ba8-5506-4bb3-b3a4-ae4f32859231", "amount":  50}
