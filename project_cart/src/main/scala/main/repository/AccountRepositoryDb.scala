@@ -40,7 +40,7 @@ class AccountRepositoryDb(client: TranferClient)(implicit val ec: ExecutionConte
         } yield res
     }
 
-    override def transfer_other(carts: Transfercash): Future[Account] = {
+    override def transfer_other(carts: Transfercash): Future[Either[String, Account]] = {
         for {
             future <- takes(Transaction(carts.id_1, carts.amount))
             res <- client.deposit_other(Transaction(carts.id_2, carts.amount))
