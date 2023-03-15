@@ -14,7 +14,7 @@ trait AccountRepository {
 
     def transfer(carts: Transfercash): Future[Either[String, Account]]
 
-    def transfer_other(carts: Transfercash): Future[Either[String, Account]]
+    def transfer_other(carts: Transfercash): Future[Account]
 
     def deposit(carts: Transaction): Future[Either[String, Account]]
 

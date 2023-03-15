@@ -13,7 +13,7 @@ import main.model.{Account, Transaction}
 import scala.concurrent.{ExecutionContext, Future}
 
 class TranferClient(implicit val ec: ExecutionContext, actorSystem: ActorSystem) extends FailFastCirceSupport {
-    def deposit_other(client: Transaction): Future[Either[String, Account]] = {
+    def deposit_other(client: Transaction): Future[Account] = {
         val port = ConfigFactory.load().getInt("portout")
         val request = HttpRequest(
             method = HttpMethods.PUT,
@@ -22,7 +22,7 @@ class TranferClient(implicit val ec: ExecutionContext, actorSystem: ActorSystem)
         )
         for {
             response <- Http().singleRequest(request)
-            result <- Unmarshal(response).to[Either[String, Account]]
+            result <- Unmarshal(response).to[Account]
 
         } yield result
     }

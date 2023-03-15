@@ -51,10 +51,7 @@ class AccountRoute(bank: AccountRepository) extends FailFastCirceSupport {
             } ~
             path("transfer_other") {
                 (put & entity(as[Transfercash])) { del =>
-                    onSuccess(bank.transfer_other(del)) {
-                        case Right(value) => complete(value)
-                        case Left(s) => complete(StatusCodes.NotAcceptable, s)
-                    }
+                    complete(bank.transfer_other(del))
                 }
             } ~
             // Удалить счет

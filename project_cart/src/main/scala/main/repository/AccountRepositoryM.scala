@@ -33,14 +33,10 @@ class AccountRepositoryM(client: TranferClient)(implicit val ec: ExecutionContex
         } yield res
     }
 
-    override def transfer_other(carts: Transfercash): Future[Either[String, Account]] = {
+    override def transfer_other(carts: Transfercash): Future[Account] = {
         for {
             future <- takes(Transaction(carts.id_1, carts.amount))
-            nextstep = future match {
-                case Right(account) => client.deposit_other(Transaction(carts.id_2, carts.amount))
-                case Left(s) => Future.successful(Left(s))
-            }
-            res <- nextstep
+            res <- client.deposit_other(Transaction(carts.id_2, carts.amount))
         } yield res
     }
     override def deposit(carts: Transaction): Future[Either[String, Account]] = Future {
