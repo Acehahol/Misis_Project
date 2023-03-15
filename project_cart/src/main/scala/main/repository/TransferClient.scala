@@ -20,12 +20,11 @@ class TranferClient(implicit val ec: ExecutionContext, actorSystem: ActorSystem)
             uri = s"http://localhost:" + port + "/account/" + client.id + "/deposit",
             entity = HttpEntity(MediaTypes.`application/json`, client.amount.asJson.noSpaces)
         )
-        println(request)
         for {
             response <- Http().singleRequest(request)
             result <- Unmarshal(response).to[Either[String, Account]]
-        } yield result
 
+        } yield result
     }
 
 }

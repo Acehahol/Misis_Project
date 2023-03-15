@@ -25,6 +25,11 @@ class AccountRoute(bank: AccountRepository) extends FailFastCirceSupport {
                     complete(bank.create(newCart))
                 }
             } ~
+            path("del" / JavaUUID) { id =>
+                post {
+                    complete(bank.delete(id))
+                }
+            } ~
             // Получить данные
             path("account" / JavaUUID) { id =>
                 get {
