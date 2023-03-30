@@ -12,8 +12,11 @@ object AccountDb {
         val firstname = column[String]("firstname")
         val surname = column[String]("surname")
         val cash = column[Int]("cash")
+        val cashback = column[Int]("cashback")
+        val selected_category = column[String]("selected_category")
 
-        def * = (id, firstname, surname, cash) <> ((Account.apply _).tupled, Account.unapply)
+        def * =
+            (id, firstname, surname, cash, cashback, selected_category) <> ((Account.apply _).tupled, Account.unapply)
     }
 
     val itemTable = TableQuery[ItemTable]

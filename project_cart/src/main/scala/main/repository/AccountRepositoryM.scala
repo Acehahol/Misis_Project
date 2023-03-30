@@ -17,7 +17,12 @@ class AccountRepositoryM(client: TranferClient)(implicit val ec: ExecutionContex
     }
 
     override def create(create: CreateAcc): Future[Account] = Future {
-        val cart = Account(id = UUID.randomUUID(), firstname = create.firstname, surname = create.surname)
+        val cart = Account(
+            id = UUID.randomUUID(),
+            firstname = create.firstname,
+            surname = create.surname,
+            selected_category = create.selected_category
+        )
         bank.put(cart.id, cart)
         cart
     }
