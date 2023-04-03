@@ -25,7 +25,7 @@ GET http://localhost:8080/account/4494520c-3203-4fee-a7a1-045a87922bac
 PUT http://localhost:8080/transfer
 Content-Type: application/json
 
-{"id_1": "5504bcc8-9137-49ae-a22e-f8b0390b8684","id_2": "d44b4966-2ea4-4916-b4d2-623e1463610e", "amount":  100, "category": "Produc"}
+{"id_1": "5504bcc8-9137-49ae-a22e-f8b0390b8684","id_2": "d44b4966-2ea4-4916-b4d2-623e1463610e", "amount":  100, "category": "Product"}
 
 ###
 DELETE http://localhost:8080/account/e887ae00-e6d6-4bab-9ff9-eb381bb76d96
@@ -45,3 +45,6 @@ PUT http://localhost:8080/transfer_other
 Content-Type: application/json
 
 {"id_1": "6180b626-7829-4d70-b869-b475ecd27996","id_2": "0b9727e3-8142-4f0b-873a-1e5d5afac8ce", "amount":  1000}
+###
+PUT http://localhost:8080/getcashback/5504bcc8-9137-49ae-a22e-f8b0390b8684
+Content-Type: application/json

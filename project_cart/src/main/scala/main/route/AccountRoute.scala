@@ -80,6 +80,15 @@ class AccountRoute(bank: AccountRepository) extends FailFastCirceSupport {
                         case Left(s) => complete(StatusCodes.NotAcceptable, s)
                     }
                 }
+            } ~
+            path("getcashback" / JavaUUID) { id =>
+                put {
+                    onSuccess(bank.getcashback(id)) {
+                        case Right(value) => complete(value)
+                        case Left(s) => complete(StatusCodes.NotAcceptable, s)
+                    }
+                }
             }
+
     }
 }

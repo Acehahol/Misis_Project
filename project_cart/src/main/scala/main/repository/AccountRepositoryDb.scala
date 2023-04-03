@@ -121,7 +121,7 @@ class AccountRepositoryDb(client: TranferClient)(implicit val ec: ExecutionConte
         proc
     }
 
-    def addcashback(id: UUID, category: String, commission: Int): Future[Option[Account]] = {
+    override def addcashback(id: UUID, category: String, commission: Int): Future[Option[Account]] = {
         val query_selcat = itemTable
             .filter(_.id === id)
             .map(_.selected_category)
@@ -143,6 +143,37 @@ class AccountRepositoryDb(client: TranferClient)(implicit val ec: ExecutionConte
                 }
             res <- find(id)
         } yield res
+    }
+
+    override def getcashback(id: UUID): Future[Either[String, Account]] = {
+
+        val querycash = itemTable
+            .filter(_.id === id)
+            .map(_.cash)
+        val querycash_back = itemTable
+            .filter(_.id === id)
+            .map(_.cashback)
+        for {
+            oldcash <- db.run(querycash.result.headOption)
+            cash <- db.run(querycash_back.result.head)
+            updateCash = oldcash
+                .map { oldc =>
+                    Right(oldc + cash)
+                }
+                .getOrElse(Left("Не найден аккаунт"))
+            future = updateCash.map(price =>
+                db.run {
+                    querycash.update(price)
+
+                }
+            ) match {
+                case Right(future) => future.map(Right(_))
+                case Left(s) => Future.successful(Left(s))
+            }
+            cashback <- db.run(querycash_back.update(0))
+            updated <- future
+            res <- find(id)
+        } yield updated.map(_ => res.get)
     }
 }
 

@@ -1,5 +1,6 @@
 package main.db
 
+import com.typesafe.config.ConfigFactory
 import main.model.Account
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.Tag
@@ -18,6 +19,6 @@ object AccountDb {
         def * =
             (id, firstname, surname, cash, cashback, selected_category) <> ((Account.apply _).tupled, Account.unapply)
     }
-
     val itemTable = TableQuery[ItemTable]
+
 }

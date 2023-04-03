@@ -20,4 +20,9 @@ trait AccountRepository {
     def takes(carts: Transaction): Future[Either[String, Account]]
 
     def delete(id: UUID): Future[Unit]
+
+    def addcashback(id: UUID, category: String, commission: Int): Future[Option[Account]]
+
+    def getcashback(id: UUID): Future[Either[String, Account]]
+
 }

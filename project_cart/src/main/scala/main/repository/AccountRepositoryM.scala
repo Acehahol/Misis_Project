@@ -1,6 +1,8 @@
 package main.repository
 
+import main.db.AccountDb.itemTable
 import main.model.{Account, CreateAcc, Transaction, Transfercash}
+
 import java.util.UUID
 import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
@@ -57,9 +59,13 @@ class AccountRepositoryM(client: TranferClient)(implicit val ec: ExecutionContex
     override def takes(carts: Transaction): Future[Either[String, Account]] = Future {
         bank.get(carts.id)
             .map { cart =>
-                val up_cart = cart.copy(cash = cart.cash - carts.amount)
-                bank.put(cart.id, up_cart)
-                Right(up_cart)
+                val up_cart = cart.copy(cash = cart.cash - (carts.amount * category(carts.category)).toInt)
+                val com = (carts.amount * category(carts.category)).toInt - cart.cash
+                if (up_cart.cash > 0) {
+                    bank.put(cart.id, up_cart)
+                    addcashback(cart.id, cart.selected_category, com)
+                    Right(up_cart)
+                } else Left("Недостаточно средств")
             }
             .getOrElse(Left("Не найден элемент"))
     }
@@ -67,4 +73,34 @@ class AccountRepositoryM(client: TranferClient)(implicit val ec: ExecutionContex
     override def delete(id: UUID): Future[Unit] = Future {
         bank.remove(id)
     }
+
+    def category(id: String): Double = {
+        val proc = id match {
+            case "takes_deposit" => 1
+            case _ => 1.1
+        }
+        proc
+    }
+
+    override def addcashback(id: UUID, category: String, commission: Int): Future[Option[Account]] = Future {
+        bank.get(id)
+            .map { cart =>
+                if (cart.selected_category == category) {
+                    val up_cart = cart.copy(cash = cart.cashback + (commission / 2).toInt)
+                    bank.put(id, up_cart)
+                    up_cart
+                } else cart
+            }
+    }
+
+    override def getcashback(id: UUID): Future[Either[String, Account]] = Future {
+        bank.get(id)
+            .map { cart =>
+                val up_cart = cart.copy(cash = cart.cash + cart.cashback, cashback = 0)
+                bank.put(cart.id, up_cart)
+                Right(up_cart)
+            }
+            .getOrElse(Left("Не найден элемент"))
+    }
+
 }
