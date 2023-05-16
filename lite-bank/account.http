@@ -1,12 +1,8 @@
 ###
-POST localhost:8071/update/1/200
+POST localhost:8071/update/1/1234
 
 ###
 POST localhost:8071/update/2/284
-
-
-###
-POST localhost:8071/update/2/-12
 
 ###
 POST localhost:8071/update/3/4564
@@ -27,6 +23,6 @@ Content-Type: application/json
 
 {
   "sourceId": 2,
-  "destinationId": 3,
+  "destinationId": 1,
   "value": 2347
 }

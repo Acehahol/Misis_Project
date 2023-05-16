@@ -1,5 +1,6 @@
 package misis.model
 
+import java.time.Instant
 import java.util.UUID
 
 case class Account(id: Int, amount: Int) {
@@ -7,7 +8,14 @@ case class Account(id: Int, amount: Int) {
 }
 
 trait Command
-case class AccountUpdate(accountId: Int, value: Int)
+case class AccountUpdate(accountId: Int, value: Int, category: Option[String], tags: Option[Seq[String]])
 
 trait Event
-case class AccountUpdated(accountId: Int, value: Int)
+case class AccountUpdated(
+    operationId: UUID = UUID.randomUUID(),
+    accountId: Int,
+    value: Int,
+    publishedAt: Option[Instant] = Some(Instant.now()),
+    category: Option[String],
+    tags: Option[Seq[String]]
+)

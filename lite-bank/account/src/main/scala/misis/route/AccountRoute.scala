@@ -7,7 +7,7 @@ import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext
 
-class Route(implicit ec: ExecutionContext) extends FailFastCirceSupport {
+class AccountRoute(implicit ec: ExecutionContext) extends FailFastCirceSupport {
 
     def routes =
         (path("hello") & get) {

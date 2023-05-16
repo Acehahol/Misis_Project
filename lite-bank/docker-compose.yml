@@ -1,0 +1,72 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres:9.6
+    environment:
+      POSTGRES_PASSWORD: 1111
+    ports:
+      - 5434:5432
+    networks:
+      - misis-local
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    ports:
+      - 15672:15672
+      - 5672:5672
+    networks:
+      - misis-local
+
+  elasticsearch:
+    image: elasticsearch:7.9.3
+    environment:
+      discovery.type: single-node
+    ports:
+      - 9200:9200
+    networks:
+      - misis-local
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - misis-local
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - 9094:9094
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OPTS: -Xms128m -Xmx256m
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://127.0.0.1:9094
+      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+      KAFKA_ADVERTISED_HOSTNAME: INSIDE
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+    networks:
+      - misis-local
+
+  fun-cart:
+    image: misis-fun-cart
+    container_name: misis-fun-cart
+    build:
+      dockerfile: ../misis-scala-22/docker/Dockerfile
+      context: ../misis-scala-22
+    environment:
+      PGHOST: db
+      PGPORT: 5432
+    ports:
+      - 8080:8080
+    networks:
+      - misis-local
+
+
+networks:
+  misis-local:
