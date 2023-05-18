@@ -58,6 +58,7 @@ trait WithKafka {
             .to(Producer.plainSink(producerSettings))
             .run()
     }
+
 }
 
 trait TopicName[T] {

@@ -19,3 +19,7 @@ case class AccountUpdated(
     category: Option[String],
     tags: Option[Seq[String]]
 )
+case class TransferResponse(
+                               transactionId: String,
+                               isSuccess: Boolean
+                           )

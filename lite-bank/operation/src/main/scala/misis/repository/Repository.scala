@@ -1,12 +1,12 @@
 package misis.repository
 
+import io.circe.generic.auto._
 import misis.TopicName
 import misis.kafka.Streams
-import misis.model.{Account, AccountUpdate, TransferStart}
-import io.circe.generic.auto._
-import scala.concurrent.Future
+import misis.model.{AccountUpdate, TransferStart}
+import misis.WithKafka
 
-class Repository(streams: Streams){
+class Repository(streams: Streams) {
     implicit val commandTopicName: TopicName[AccountUpdate] = streams.simpleTopicName[AccountUpdate]
 
     def transfer(transfer: TransferStart) = {

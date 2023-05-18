@@ -19,10 +19,8 @@ lazy val operation = (project in file("."))
         libraryDependencies ++= Seq(
             "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
             "de.heikoseeberger" %% "akka-http-circe" % AkkaHttpJsonVersion,
-
-            "ch.qos.logback"     % "logback-classic"       % "1.2.3"
+            "ch.qos.logback" % "logback-classic" % "1.2.3"
         )
     )
-
 
 enablePlugins(JavaAppPackaging)
