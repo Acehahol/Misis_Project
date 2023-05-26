@@ -17,4 +17,3 @@ case class AccountUpdated(
     transaction: Int,
     directId: Int
 )
-

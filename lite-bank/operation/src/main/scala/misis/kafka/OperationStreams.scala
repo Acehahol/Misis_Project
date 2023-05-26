@@ -12,10 +12,23 @@ class OperationStreams()(implicit val system: ActorSystem, executionContext: Exe
     implicit val commandTopicName: TopicName[AccountUpdated] = simpleTopicName[AccountUpdated]
 
     kafkaSource[AccountUpdated]
-        .filter(event => event.transaction == 1)
+        .filter(event => event.transaction == 1 || event.transaction == 2)
         .map { command =>
-            produceCommand(AccountUpdate(command.directId, -command.value))
-            println(s"С ${command.accountId} счета успешно переведено ${-command.value} на ${command.directId} счет")
+            if (command.transaction == 1) {
+                produceCommand(AccountUpdate(command.directId, -command.value, 2, command.accountId))
+                println(
+                    s"С ${command.accountId} счета успешно переведено ${-command.value} на ${command.directId} счет"
+                )
+            } else {
+                produceCommand(
+                    AccountUpdated(
+                        accountId = command.directId,
+                        value = command.value,
+                        transaction = 3,
+                        directId = command.accountId
+                    )
+                )
+            }
         }
         .to(Sink.ignore)
         .run()

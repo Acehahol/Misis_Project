@@ -36,7 +36,15 @@ class AccountStreams(repository: AccountRepository)(implicit
     kafkaSource[AccountUpdated]
         .filter(event => repository.account.id == event.accountId)
         .map { e =>
-            println(s"Аккаунт ${e.accountId} обновлен на сумму ${e.value}. Баланс: ${repository.account.amount}")
+            if (e.transaction != 3) {
+                println(
+                    s"Аккаунт ${e.accountId} обновлен на сумму ${e.value}. Баланс: ${repository.account.amount}. Операция ${e.transaction}"
+                )
+            } else {
+                println(
+                    s"С  ${e.accountId} аккаунта переведено ${e.value} на ${e.directId} аккаунт Баланс: ${repository.account.amount}"
+                )
+            }
             e
         }
         .to(Sink.ignore)
