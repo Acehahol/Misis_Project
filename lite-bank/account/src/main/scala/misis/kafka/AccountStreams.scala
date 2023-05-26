@@ -25,8 +25,8 @@ class AccountStreams(repository: AccountRepository)(implicit
                     AccountUpdated(
                         accountId = command.accountId,
                         value = command.value,
-                        category = command.category,
-                        tags = command.tags
+                        transaction = command.transaction,
+                        directId = command.directId
                     )
                 )
         }

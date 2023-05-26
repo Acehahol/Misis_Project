@@ -14,7 +14,7 @@ Content-Type: application/json
 {
   "sourceId": 1,
   "destinationId": 2,
-  "value": 234
+  "value": 100
 }
 
 ###
