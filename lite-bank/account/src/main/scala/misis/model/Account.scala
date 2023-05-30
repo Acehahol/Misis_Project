@@ -9,6 +9,7 @@ case class Account(id: Int, amount: Int) {
 
 trait Command
 case class AccountUpdate(accountId: Int, value: Int, transaction: Int = 0, directId: Int = 0)
+case class AccountCreate(accountId: Int)
 
 trait Event
 case class AccountUpdated(
@@ -17,3 +18,4 @@ case class AccountUpdated(
     transaction: Int,
     directId: Int
 )
+case class AccountCreated(accountId: Int)

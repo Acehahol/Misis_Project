@@ -4,7 +4,7 @@ import akka.actor.ActorSystem
 import akka.stream.scaladsl.Sink
 import io.circe.generic.auto._
 import misis.WithKafka
-import misis.model.{AccountUpdate, AccountUpdated}
+import misis.model.{AccountUpdate, AccountUpdated, AccountCreate, AccountCreated}
 import misis.repository.AccountRepository
 
 import scala.concurrent.ExecutionContext
@@ -14,13 +14,17 @@ class AccountStreams(repository: AccountRepository)(implicit
     executionContext: ExecutionContext
 ) extends WithKafka {
 
-    def group = s"account-${repository.accountId}"
+    def group = s"accounts"
 
     kafkaSource[AccountUpdate]
-        .filter(command => repository.account.id == command.accountId && repository.account.amount + command.value >= 0)
+        .filter(command =>
+            repository.containsAccount(command.accountId) && repository.getAccountBalance(
+                command.accountId
+            ) + command.value >= 0
+        )
         .mapAsync(1) { command =>
             repository
-                .update(command.value)
+                .updateAccount(command.accountId, command.value)
                 .map(_ =>
                     AccountUpdated(
                         accountId = command.accountId,
@@ -34,19 +38,43 @@ class AccountStreams(repository: AccountRepository)(implicit
         .run()
 
     kafkaSource[AccountUpdated]
-        .filter(event => repository.account.id == event.accountId)
         .map { e =>
             if (e.transaction != 3) {
                 println(
-                    s"Аккаунт ${e.accountId} обновлен на сумму ${e.value}. Баланс: ${repository.account.amount}. Операция ${e.transaction}"
+                    s"Аккаунт ${e.accountId} обновлен на сумму ${e.value}. Баланс: ${repository
+                            .getAccountBalance(e.accountId)}. Операция ${e.transaction}"
                 )
             } else {
                 println(
-                    s"С  ${e.accountId} аккаунта переведено ${e.value} на ${e.directId} аккаунт Баланс: ${repository.account.amount}"
+                    s"С  ${e.accountId} аккаунта переведено ${e.value} на ${e.directId} аккаунт Баланс: ${repository
+                            .getAccountBalance(e.accountId)}"
                 )
             }
             e
         }
         .to(Sink.ignore)
         .run()
+    kafkaSource[AccountCreate]
+        .mapAsync(1) { command =>
+            repository
+                .addAccount(command.accountId)
+                .map(_ =>
+                    AccountCreated(
+                        accountId = command.accountId
+                    )
+                )
+        }
+        .to(kafkaSink)
+        .run()
+
+    kafkaSource[AccountCreated]
+        .map { e =>
+            println(
+                s"Аккаунт ${e.accountId} cоздан"
+            )
+            e
+        }
+        .to(Sink.ignore)
+        .run()
+
 }
