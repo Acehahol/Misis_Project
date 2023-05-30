@@ -39,14 +39,24 @@ class AccountStreams(repository: AccountRepository)(implicit
 
     kafkaSource[AccountUpdated]
         .map { e =>
-            if (e.transaction != 3) {
+            if (e.transaction < 3) {
                 println(
                     s"Аккаунт ${e.accountId} обновлен на сумму ${e.value}. Баланс: ${repository
                             .getAccountBalance(e.accountId)}. Операция ${e.transaction}"
                 )
-            } else {
+            } else if (e.transaction == 4) {
+                println(
+                    s"С  ${e.accountId} аккаунта списана коммисия ${e.value}  Баланс: ${repository
+                            .getAccountBalance(e.accountId)}"
+                )
+            } else if (e.transaction == 3) {
                 println(
                     s"С  ${e.accountId} аккаунта переведено ${e.value} на ${e.directId} аккаунт Баланс: ${repository
+                            .getAccountBalance(e.accountId)}"
+                )
+            } else {
+                println(
+                    s"На аккаунт ${e.accountId} начисленно ${e.value} баллов CashBack. Баланс: ${repository
                             .getAccountBalance(e.accountId)}"
                 )
             }

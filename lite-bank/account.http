@@ -1,12 +1,19 @@
 ###
-POST localhost:8071/update/3/1234
+POST localhost:8071/update/1/1234
 
 ###
 POST localhost:8071/update/2/284
 
 ###
 
-POST localhost:8071/createacc/3
+POST localhost:8071/createacc/2
+
+###
+GET localhost:8070/cashback/1
+
+###
+
+POST localhost:8070/getcashback/1
 
 ###
 POST localhost:8071/update/3/4564
