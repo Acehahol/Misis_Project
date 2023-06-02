@@ -15,7 +15,7 @@ class OperationStreams()(implicit val system: ActorSystem, executionContext: Exe
         .filter(event => event.transaction == 1 || event.transaction == 2)
         .map { command =>
             if (command.transaction == 1) {
-                produceCommand(AccountUpdate(command.directId, -command.value, 2, command.accountId))
+                produceCommand(AccountUpdate(command.directId, -command.value, 2, command.accountId, command.category ))
                 println(
                     s"С ${command.accountId} счета успешно переведено ${-command.value} на ${command.directId} счет"
                 )
@@ -25,7 +25,8 @@ class OperationStreams()(implicit val system: ActorSystem, executionContext: Exe
                         accountId = command.directId,
                         value = command.value,
                         transaction = 3,
-                        directId = command.accountId
+                        directId = command.accountId,
+                        category = command.category
                     )
                 )
             }

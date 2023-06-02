@@ -17,7 +17,9 @@ class Repository(streams: OperationStreams)(implicit val system: ActorSystem, ex
 
     def transfer(transfer: TransferStart) = {
         if (transfer.value > 0) {
-            streams.produceCommand(AccountUpdate(transfer.sourceId, -transfer.value, 1, transfer.destinationId))
+            streams.produceCommand(
+                AccountUpdate(transfer.sourceId, -transfer.value, 1, transfer.destinationId, transfer.category)
+            )
         }
     }
 }

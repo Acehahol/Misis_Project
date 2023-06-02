@@ -8,9 +8,11 @@ case class Account(id: Int, amount: Int) {
 case class CashBack(id: Int, amount: Int) {
     def update(value: Int) = this.copy(amount = amount + value)
 }
-
+case class FeeLimit(id: Int, amount: Int, proc: Double) {
+    def update(value: Int) = this.copy(amount = amount + value)
+}
 trait Command
-case class AccountUpdate(accountId: Int, value: Int, transaction: Int = 0, directId: Int = 0)
+case class AccountUpdate(accountId: Int, value: Int, transaction: Int = 0, directId: Int = 0 )
 
 case class AccountCreate(accountId: Int)
 

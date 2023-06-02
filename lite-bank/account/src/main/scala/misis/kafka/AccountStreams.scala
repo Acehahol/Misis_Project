@@ -30,7 +30,8 @@ class AccountStreams(repository: AccountRepository)(implicit
                         accountId = command.accountId,
                         value = command.value,
                         transaction = command.transaction,
-                        directId = command.directId
+                        directId = command.directId,
+                        category = command.category
                     )
                 )
         }

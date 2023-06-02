@@ -15,7 +15,7 @@ lazy val common = ProjectRef(base = file("../common"), id = "common")
 lazy val template = (project in file("."))
     .dependsOn(common)
     .settings(
-        name := "fee_cb",
+        name := "cashback",
         libraryDependencies ++= Seq(
             "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
             "de.heikoseeberger" %% "akka-http-circe" % AkkaHttpJsonVersion,

@@ -1,39 +1,41 @@
+// Создание аккаунтов
+###
+POST localhost:8071/createacc/1
+###
+###
+POST localhost:8071/createacc/2
+//Добавление средств
 ###
 POST localhost:8071/update/1/1234
-
 ###
 POST localhost:8071/update/2/284
-
 ###
+// Добавление категории
+POST localhost:8073/addcategory
+Content-Type: application/json
 
-POST localhost:8071/createacc/2
-
+{
+  "name": "car",
+  "proc": 0.2
+}
 ###
-GET localhost:8070/cashback/1
-
-###
-
-POST localhost:8070/getcashback/1
-
-###
-POST localhost:8071/update/3/4564
-
-###
+//Создание перевода
 POST localhost:8071/transfer
 Content-Type: application/json
 
 {
   "sourceId": 1,
   "destinationId": 2,
-  "value": 1000
+  "value": 100,
+  "category": "car"
 }
-
 ###
-POST localhost:8071/transfer
-Content-Type: application/json
-
-{
-  "sourceId": 2,
-  "destinationId": 1,
-  "value": 2347
-}
+// Проверка лимитов перевода
+GET localhost:8070/fee_limit/1
+###
+// Проверка кэщбеков на аккаунте
+GET localhost:8073/cashback/1
+###
+// Начисление кэшбэков на аккаунт
+POST localhost:8073/getcashback/1
+###

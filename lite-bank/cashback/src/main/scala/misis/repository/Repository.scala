@@ -1,10 +1,7 @@
 package misis.repository
 
-import io.circe.generic.auto._
 import akka.actor.ActorSystem
-import misis.TopicName
-import misis.kafka.Fee_cb_streams
-import misis.model.{AccountUpdate, CashBack}
+import misis.model.{CashBack, Category}
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
@@ -16,14 +13,27 @@ class CashBackRepository()(implicit
 
     private val cashbacks: ListBuffer[CashBack] = ListBuffer.empty[CashBack]
 
+    private val category: ListBuffer[Category] = ListBuffer.empty[Category]
+
     def addAccount(accountId: Int): Future[CashBack] = {
         val account = CashBack(accountId, 0)
         cashbacks += account
         Future.successful(account)
     }
 
+    def addCategory(account: Category): Future[Category] = {
+        category += account
+        Future.successful(account)
+    }
+
     def getCbBalance(accountId: Int): Int = {
         cashbacks.find(_.id == accountId).map(_.amount).getOrElse(0)
+    }
+    def getProc(name: String): Double = {
+        category.find(_.name == name).map(_.proc).getOrElse(0)
+    }
+    def containsCat(name: String): Boolean = {
+        category.exists(_.name == name)
     }
 
     def containsAccount(accountId: Int): Boolean = {
